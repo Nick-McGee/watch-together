@@ -220,6 +220,7 @@ function addVideoToRoom(roomId: string, url: string, user: UserType) {
           setCurVideo(roomId, newVideo).then((video) => {
             console.log(`${user.name} (${user._id}) added and set a new video`);
             io.to(roomId).emit("newVideo", video);
+            play(roomId);
           });
         } else {
           addVideo(roomId, newVideo).then((queue) => {
@@ -240,9 +241,10 @@ function getNextVideo(roomId: string, user?: UserType) {
       if (user) {
         console.log(`${user.name} (${user._id}) skipped to next video`);
       }
-      setCurVideo(roomId, video).then((video) =>
-        io.to(roomId).emit("newVideo", video)
-      );
+      setCurVideo(roomId, video).then((video) => {
+        io.to(roomId).emit("newVideo", video);
+        play(roomId);
+      });
 
       getVideos(roomId).then((queue) =>
         io.to(roomId).emit("updatedQueue", queue)
@@ -267,11 +269,15 @@ function hasCurVideo(roomId: string): Promise<boolean> {
     });
 }
 
-function play(roomId: string, user: UserType) {
-  setPlaying(roomId, false)
+function play(roomId: string, user?: UserType) {
+  setPlaying(roomId, true)
     .then(() => {
-      console.log(`${user.name} (${user._id}) set video to pause`);
-      io.sockets.in(roomId).emit("paused", { user: user });
+      if (user) {
+        console.log(`${user.name} (${user._id}) set video to play`);
+        io.sockets.in(roomId).emit("play", { user: user });
+      } else {
+        io.sockets.in(roomId).emit("play");
+      }
     })
     .catch((error) => console.log(error));
 }

@@ -1,5 +1,3 @@
-import { Types } from "mongoose";
-
 export interface ResponseError extends Error {
   status?: number;
 }
@@ -29,5 +27,5 @@ export type RoomType = {
   curVideo?: VideoType;
   curTime?: number;
   playing?: boolean;
-  expiry?: Date;
+  expireAt?: Date;
 };

@@ -8,7 +8,10 @@ const roomSchema = new Schema<RoomType>({
   curVideo: { type: videoSchema, required: false },
   curTime: { type: Number, required: false, default: 0 },
   playing: { type: Boolean, required: false, default: true },
-  expiry: { type: Date, expires: "60m", default: Date.now },
+  expireAt: {
+    type: Date,
+    default: () => Date.now() + 30 * 60 * 1000,
+  },
 });
 
 export default model<RoomType>("Room", roomSchema);

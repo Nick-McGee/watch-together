@@ -10,7 +10,8 @@ const VideoPlayer = ({ roomId }: { roomId: string }): JSX.Element => {
   );
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number | undefined>(undefined);
-  const [playing, setPlaying] = useState<boolean>(true);
+  // get from video
+  const [playing, setPlaying] = useState<boolean>(false);
   const [ended, setEnded] = useState<boolean>(false);
   const [seeking, setSeeking] = useState<boolean>(false);
 
@@ -20,7 +21,7 @@ const VideoPlayer = ({ roomId }: { roomId: string }): JSX.Element => {
   useEffect(() => {
     if (socket !== undefined) {
       getCurVideo(roomId).then((video) => {
-        console.log(video);
+        setPlaying(video["playing"]);
         setCurrentTime(video["curTime"]);
         setCurrentVideo(video["video"]["url"]);
         setDuration(video["video"]["length"]);
@@ -111,7 +112,6 @@ const VideoPlayer = ({ roomId }: { roomId: string }): JSX.Element => {
   };
 
   const handleEnded = () => {
-    console.log("ended");
     setEnded(true);
   };
 

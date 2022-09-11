@@ -17,7 +17,7 @@ const Room = (): JSX.Element => {
       <UsernameCheck roomId={roomId!} />
       <p>{roomId}</p>
       <VideoPlayer roomId={roomId!} />
-      <AddVideo />
+      <AddVideo roomId={roomId!} />
       <VideoQueue roomId={roomId!} />
       <UsersList />
     </RoomContextProvider>
